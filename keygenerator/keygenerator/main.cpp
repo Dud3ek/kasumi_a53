@@ -1,4 +1,5 @@
 #include<iostream>
+#include<cstdio>
 
 #define ROL16(a,b) (unsigned short)((a<<b)|(a>>(16-b)))
 
@@ -49,21 +50,30 @@ int main(void) {
     Schedule(key);
 
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KLi1[i] << " ";
+        printf("%04x ", KLi1[i]);
+    printf("\n");
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KLi2[i] << " ";
+        printf("%04x ", KLi2[i]);
+    printf("\n");
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KOi1[i] << " ";
+        printf("%04x ", KOi1[i]);
+    printf("\n");
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KOi2[i] << " ";
+        printf("%04x ", KOi2[i]);
+    printf("\n");
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KOi3[i] << " ";
+        printf("%04x ", KOi3[i]);
+    printf("\n");
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KIi1[i] << " ";
+        printf("%04x ", KIi1[i]);
+    printf("\n");
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KIi2[i] << " ";
+        printf("%04x ", KIi2[i]);
+    printf("\n");
     for (i = 0; i < 8; i++)
-        std::cout << std::hex << KIi3[i] << " ";
+        printf("%04x ", KIi3[i]);
+    printf("\n");
+
 
     return 0;
 }
