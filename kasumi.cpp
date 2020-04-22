@@ -229,11 +229,7 @@ void KasumiDecrypt(u8* data)
 
 
 
-/*---------------------------------------------------------------------
- * KeySchedule()
- * Build the key schedule. Most "key" operations use 16-bit
- * subkeys so we build u16-sized arrays that are "endian" correct.
- *---------------------------------------------------------------------*/
+
 void KeySchedule(u16* key)
 {
     static unsigned short Slv[] = {
@@ -260,6 +256,3 @@ void KeySchedule(u16* key)
 
 }
 
-/*---------------------------------------------------------------------
- * e n d o f k a s u m i . c
- *---------------------------------------------------------------------*/
