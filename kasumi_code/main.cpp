@@ -16,33 +16,7 @@ int main(void)
     };
 
     KeySchedule(key);
-    /* 
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KLi1[i]);
-    printf("\n");
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KLi2[i]);
-    printf("\n");
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KOi1[i]);
-    printf("\n");
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KOi2[i]);
-    printf("\n");
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KOi3[i]);
-    printf("\n");
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KIi1[i]);
-    printf("\n");
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KIi2[i]);
-    printf("\n");
-    for (i = 0; i < 8; i++)
-        printf("%04x ", KIi3[i]);
-    printf("\n");
-    */
-
+ 
     printf("plain text:");
     for (i = 0; i < 8; i++)
         printf("%02x ", text[i]);
@@ -61,7 +35,6 @@ int main(void)
     for (i = 0; i < 8; i++)
         printf("%02x ", text[i]);
     printf("\n");
-
 
     return 0;
 }

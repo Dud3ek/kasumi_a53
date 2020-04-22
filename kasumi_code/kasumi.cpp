@@ -7,32 +7,16 @@
  *
  * This has been coded for clarity, not necessarily for efficiency.
  *
- * This will compile and run correctly on both Intel (little endian)
- * and Sparc (big endian) machines. (Compilers used supported 32-bit ints).
- *
  * Version 1.1 08 May 2000
  *
  *-----------------------------------------------------------------------*/
 #include "kasumi.h"
  /*--------- 16 bit rotate left ------------------------------------------*/
 #define ROL16(a,b) (u16)((a<<b)|(a>>(16-b)))
-/*------- unions: used to remove "endian" issues ------------------------*/
-typedef union {
-    u32 b32;
-    u16 b16[2];
-    u8 b8[4];
-} DWORD;
-typedef union {
-    u16 b16;
-    u8 b8[2];
-} WORD;
 /*-------- globals: The subkey arrays -----------------------------------*/
 static u16 KLi1[8], KLi2[8];
 static u16 KOi1[8], KOi2[8], KOi3[8];
 static u16 KIi1[8], KIi2[8], KIi3[8];
-//extern u16 KLi1[8], KLi2[8];
-//extern u16 KOi1[8], KOi2[8], KOi3[8];
-//extern u16 KIi1[8], KIi2[8], KIi3[8];
 /*---------------------------------------------------------------------
  * FI()
  * The FI function (fig 3). It includes the S7 and S9 tables.
@@ -160,14 +144,19 @@ static u32 FL(u32 in, int index)
 void Kasumi(u8* data)
 {
     u32 left, right, temp;
-    DWORD* d;
+    u8* d;
     int n;
     /* Start by getting the data into two 32-bit words (endian corect) */
-    d = (DWORD*)data;
-    left = (((u32)d[0].b8[0]) << 24) + (((u32)d[0].b8[1]) << 16)
-        + (d[0].b8[2] << 8) + (d[0].b8[3]);
-    right = (((u32)d[1].b8[0]) << 24) + (((u32)d[1].b8[1]) << 16)
-        + (d[1].b8[2] << 8) + (d[1].b8[3]);
+    d = (u8*)data;
+
+    left = (((u32)d[0]) << 24) + (((u32)d[1]) << 16)
+        + (d[2] << 8) + (d[3]);
+
+    right = (((u32)d[4]) << 24) + (((u32)d[5]) << 16)
+        + (d[6] << 8) + (d[7]);
+
+
+
     n = 0;
     do {
         temp = FL(left, n);
@@ -189,10 +178,10 @@ void Kasumi(u8* data)
         // printf("left right\t%x %x\n", left, right);
     } while (n <= 7);
     /* return the correct endian result */
-    d[0].b8[0] = (u8)(left >> 24); d[1].b8[0] = (u8)(right >> 24);
-    d[0].b8[1] = (u8)(left >> 16); d[1].b8[1] = (u8)(right >> 16);
-    d[0].b8[2] = (u8)(left >> 8); d[1].b8[2] = (u8)(right >> 8);
-    d[0].b8[3] = (u8)(left); d[1].b8[3] = (u8)(right);
+    d[0] = (u8)(left >> 24); d[4] = (u8)(right >> 24);
+    d[1] = (u8)(left >> 16); d[5] = (u8)(right >> 16);
+    d[2] = (u8)(left >> 8);  d[6] = (u8)(right >> 8);
+    d[3] = (u8)(left);       d[7] = (u8)(right);
 }
 
 
@@ -201,14 +190,17 @@ void Kasumi(u8* data)
 void KasumiDecrypt(u8* data)
 {
     u32 left, right, temp;
-    DWORD* d;
+    u8* d;
     int n;
+    /* Start by getting the data into two 32-bit words (endian corect) */
+    d = (u8*)data;
 
-    d = (DWORD*)data;
-    left = (((u32)d[0].b8[0]) << 24) + (((u32)d[0].b8[1]) << 16)
-        + (d[0].b8[2] << 8) + (d[0].b8[3]);
-    right = (((u32)d[1].b8[0]) << 24) + (((u32)d[1].b8[1]) << 16)
-        + (d[1].b8[2] << 8) + (d[1].b8[3]);
+    left = (((u32)d[0]) << 24) + (((u32)d[1]) << 16)
+        + (d[2] << 8) + (d[3]);
+
+    right = (((u32)d[4]) << 24) + (((u32)d[5]) << 16)
+        + (d[6] << 8) + (d[7]);
+
     n = 7;
     do {
         temp = FO(right, n);
@@ -230,10 +222,10 @@ void KasumiDecrypt(u8* data)
         // printf("left right\t%x %x\n", left, right);
     } while (n >= 0);
 
-    d[0].b8[0] = (u8)(left >> 24); d[1].b8[0] = (u8)(right >> 24);
-    d[0].b8[1] = (u8)(left >> 16); d[1].b8[1] = (u8)(right >> 16);
-    d[0].b8[2] = (u8)(left >> 8); d[1].b8[2] = (u8)(right >> 8);
-    d[0].b8[3] = (u8)(left); d[1].b8[3] = (u8)(right);
+    d[0] = (u8)(left >> 24); d[4] = (u8)(right >> 24);
+    d[1] = (u8)(left >> 16); d[5] = (u8)(right >> 16);
+    d[2] = (u8)(left >> 8);  d[6] = (u8)(right >> 8);
+    d[3] = (u8)(left);       d[7] = (u8)(right);
 }
 
 
@@ -243,33 +235,32 @@ void KasumiDecrypt(u8* data)
  * Build the key schedule. Most "key" operations use 16-bit
  * subkeys so we build u16-sized arrays that are "endian" correct.
  *---------------------------------------------------------------------*/
-void KeySchedule(u8* k)
+void KeySchedule(u8* key)
 {
-    static u16 C[] = {
-        0x0123,0x4567,0x89AB,0xCDEF, 0xFEDC,0xBA98,0x7654,0x3210 };
-    u16 key[8], Kprime[8];
-    WORD* k16;
-    int n;
-    /* Start by ensuring the subkeys are endian correct on a 16-bit basis */
-    k16 = (WORD*)k;
-    for (n = 0; n < 8; ++n)
-        key[n] = (u16)((k16[n].b8[0] << 8) + (k16[n].b8[1]));
-    /* Now build the K'[] keys */
-    for (n = 0; n < 8; ++n)
-        Kprime[n] = (u16)(key[n] ^ C[n]);
-    /* Finally construct the various sub keys */
-    for (n = 0; n < 8; ++n)
+    static unsigned short Slv[] = {
+        0x0123,0x4567,0x89AB,0xCDEF, 0xFEDC,0xBA98,0x7654,0x3210
+    };
+
+    unsigned short primekey[8];
+
+    for (int n = 0; n < 8; ++n) {
+        primekey[n] = (unsigned short)(key[n] ^ Slv[n]);
+    };
+
+    for (int n = 0; n < 8; ++n)
     {
         KLi1[n] = ROL16(key[n], 1);
-        KLi2[n] = Kprime[(n + 2) & 0x7];
+        KLi2[n] = primekey[(n + 2) & 0x7];
         KOi1[n] = ROL16(key[(n + 1) & 0x7], 5);
         KOi2[n] = ROL16(key[(n + 5) & 0x7], 8);
         KOi3[n] = ROL16(key[(n + 6) & 0x7], 13);
-        KIi1[n] = Kprime[(n + 4) & 0x7];
-        KIi2[n] = Kprime[(n + 3) & 0x7];
-        KIi3[n] = Kprime[(n + 7) & 0x7];
+        KIi1[n] = primekey[(n + 4) & 0x7];
+        KIi2[n] = primekey[(n + 3) & 0x7];
+        KIi3[n] = primekey[(n + 7) & 0x7];
     }
+
 }
+
 /*---------------------------------------------------------------------
  * e n d o f k a s u m i . c
  *---------------------------------------------------------------------*/
