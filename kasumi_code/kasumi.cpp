@@ -184,8 +184,10 @@ void Kasumi(u8* data)
     d[3] = (u8)(left);       d[7] = (u8)(right);
 }
 
-
-// FIX THIS
+/*---------------------------------------------------------------------
+ * KasumiDecrypt()
+ * Decryption algorithm. Decrypts data encrypted by Kasumi.
+ *---------------------------------------------------------------------*/
 
 void KasumiDecrypt(u8* data)
 {
