@@ -120,17 +120,17 @@ static u32 FO(u32 in, int index)
  *---------------------------------------------------------------------*/
 static u32 FL(u32 in, int index)
 {
-    u16 l, r, a, b;
+    u16 left, right, a, b;
     /* split out the left and right halves */
-    l = (u16)(in >> 16);
-    r = (u16)(in);
+    left = (u16)(in >> 16);
+    right = (u16)(in);
     /* do the FL() operations */
-    a = (u16)(l & KLi1[index]);
-    r ^= ROL16(a, 1);
-    b = (u16)(r | KLi2[index]);
-    l ^= ROL16(b, 1);
+    a = (u16)(left & KLi1[index]);
+    right ^= ROL16(a, 1);
+    b = (u16)(right | KLi2[index]);
+    left ^= ROL16(b, 1);
     /* put the two halves back together */
-    in = (((u32)l) << 16) + r;
+    in = (((u32)left) << 16) + right;
 
     //printf("FL %x\n", in);
 
