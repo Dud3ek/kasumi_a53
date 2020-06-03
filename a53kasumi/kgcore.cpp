@@ -119,16 +119,16 @@ void KGcoreDecrypt(u8 ca, u8 cb, u32 cc, u8 cd, u8* ck, u8* co, int cl)
 
     while (cl > 0)
     {
-        if (cl >= 64 && cl % 64 == 0)   // n should be equal to number of bytes of input data
-        {
-            n = 7;         // it equals to 8 if cl=>64
-            cl -= 64;      // counter 
-        }
-
-        else if (cl % 64 != 0)
+        if (cl % 64 != 0)
         {
             n = ((cl % 64 + 7) / 8) - 1;       // if remainer is not 0 then it goes 7,6,5,4 etc
             cl -= cl % 64;          //counter to make remainder equal to 0
+        }
+
+        else if (cl >= 64)   // n should be equal to number of bytes of input data
+        {
+            n = 7;         // it equals to 8 if cl=>64
+            cl -= 64;      // counter 
         }
 
         for (i = n; i >= 0; --i)
