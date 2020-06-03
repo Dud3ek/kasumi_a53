@@ -15,6 +15,13 @@ typedef union {
 	u8	b8[8];
 } Struct1;
 
+
+typedef union {
+	u32 k32[2];
+	u16 k16[4];
+} testing;
+
+
 void KeySchedule(u8* key);
 void Kasumi(u8* data);
 void KasumiDecrypt(u8* data);

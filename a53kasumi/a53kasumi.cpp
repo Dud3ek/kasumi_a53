@@ -10,7 +10,7 @@ using namespace std;
 //exp means expected, got means what we got, rest pretty clear
 //found test sets on some examplary implementation of other people
 
-void printer(int which, const char* label, u8* vector, int length) //print on screen
+void printing(int which, const char* label, u8* vector, int length) //print on screen
 {
     cout << " block" << which << " " << label << " = ";
     int i;
@@ -19,14 +19,14 @@ void printer(int which, const char* label, u8* vector, int length) //print on sc
     }
 }
 
-void check(int which, u8* exp, u8* got) // check corectness function
+void check(int which, u8* expected, u8* receivedout) // check corectness function
 {
-    printer(which, "exp", exp, 15);
-    printer(which, "got", got, 15);
+    printing(which, "expected", expected, 15);
+    printing(which, "received", receivedout, 15);
     int err = 0;
     int i;
     for (i = 0; i < 15; i++) {
-        if (exp[i] == got[i]) continue;
+        if (expected[i] == receivedout[i]) continue;
         err = 1;
         break;
     }
@@ -34,7 +34,7 @@ void check(int which, u8* exp, u8* got) // check corectness function
         cout << " ERROR" << endl;
     }
     else {
-        cout << " ok" << endl;
+        cout << " OK - DATA MATCH" << endl;
     }
 }
 
@@ -63,17 +63,15 @@ void setu8(u8* dst, const char* src) //set as 8 bit uint
 }
 
 
-
-
 int main()
 {
     int i, keylen;
     unsigned int count;
-    u8 key[16], exp1[15], exp2[15], got1[15], got2[15];
+    u8 key[16], expval1[15], expval2[15], output1[15], output2[15], keytest[16];
 
 
 
-    printf("Kasumi part \n");
+    printf("Kasumi part \n \n");
 
     u8 text[8] = {
         //0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF,
@@ -106,6 +104,10 @@ int main()
         printf("%02x ", text[i]);
     printf("\n");
 
+
+
+    printf("\n A5/3 Part \n \n");
+
     const char* data[52] = {
         "2BD6459F82C5BC00", "24F20F", "889EEAAF9ED1BA1ABBD8436232E440", "5CA3406AA244CF69CF047AADA2DF40",
         "952C49104881FF48", "061527", "AB7DB38A573A325DAA76E4CB800A40", "4C4B594FEA9D00FE8978B7B7BC1080",
@@ -123,12 +125,20 @@ int main()
         setu8(key, data[i]);
         keylen = strlen(data[i]) * 4;
         count = seti(data[i + 1]);
-        GSM(key, keylen, count, got1, got2);
-        setu8(exp1, data[i + 2]);
-        setu8(exp2, data[i + 3]);
-        check(1, exp1, got1);
-        check(2, exp2, got2);
+        GSM(key, keylen, count, output1, output2);
+        setu8(expval1, data[i + 2]);
+        setu8(expval2, data[i + 3]);
+        check(1, expval1, output1);
+        check(2, expval2, output2);
     }
+
+
+    /*
+    testing L;
+    L.k32[0] = 1;
+    L.k32[1] = 2;
+    cout << L.k16[3];
+    */
 
     return 0;
 }

@@ -1,2 +1,4 @@
 ﻿  a53kasumi.cpp
+D:\ProgramFiles\MyProjects\Cpp\a53kasumi\a53kasumi\a53kasumi\a53kasumi.cpp(135,28): warning C4302: "typ rzutowania": obcięcie z "const char *" do "u8"
+D:\ProgramFiles\MyProjects\Cpp\a53kasumi\a53kasumi\a53kasumi\a53kasumi.cpp(70,69): warning C4101: "keytest": lokalna zmienna, do której nie istnieje odwołanie
   a53kasumi.vcxproj -> D:\ProgramFiles\MyProjects\Cpp\a53kasumi\a53kasumi\Debug\a53kasumi.exe

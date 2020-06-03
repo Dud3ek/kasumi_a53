@@ -21,6 +21,9 @@ void KGcore(u8 ca, u8 cb, u32 cc, u8 cd, u8* ck, u8* co, int cl)
     A.b32[0] = A.b32[1] = 0;        //modifier register
 
     // initialize modifier register and its values
+    // different size of inputs cc cb etc so different shifts
+    // ce at the end 15 bits all 0's
+
     A.b8[0] = (u8)(cc >> 24);     
     A.b8[1] = (u8)(cc >> 16);
     A.b8[2] = (u8)(cc >> 8);

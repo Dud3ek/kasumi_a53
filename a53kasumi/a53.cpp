@@ -9,7 +9,7 @@
 static u8* BuildKey(u8* inputkey, int keylength)
 {
     static u8 ck[16]; // a 128-bit input to the KGCORE function. 
-    u8 mask[] = { 0x1,0x3,0x7,0xF,0x1F,0x3F,0x7F,0xFF };
+    u8 valmask[] = { 0x1,0x3,0x7,0xF,0x1F,0x3F,0x7F,0xFF };
 
     int restofdivision;
     int i, n;
@@ -38,7 +38,7 @@ static u8* BuildKey(u8* inputkey, int keylength)
         n = 0;
         if (restofdivision) //byte limits checking
         {
-            ck[i - 1] &= mask[restofdivision];  // operation executed when our key is not equal bytes
+            ck[i - 1] &= valmask[restofdivision];  // operation executed when our key is not equal bytes
             ck[i - 1] += ck[0] << restofdivision;
             
             while (i < 16)
@@ -83,3 +83,7 @@ void GSM( u8 *inputkey, int keylength, int count, u8 *DLblock, u8 *UPblock )
     UPblock[14] &= 0xC0;
 } 
 
+void GSMDecrypt(u8* inputkey, int keylength, int count, u8* DLblock, u8* UPblock)
+{
+
+}
