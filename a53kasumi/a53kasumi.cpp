@@ -12,7 +12,7 @@ using namespace std;
 
 void printing(int which, const char* label, u8* vector, int length) //print on screen
 {
-    cout << " block" << which << " " << label << " = ";
+    cout << "\n block" << which << " " << label << " = ";
     int i;
     for (i = 0; i < length; i++) {
         cout << hex << std::setw(2) << setfill('0') << (int)vector[i] << dec;
@@ -106,7 +106,7 @@ int main()
 
 
 
-    printf("\n A5/3 Part \n \n");
+    printf("\n A5/3 Part \n");
 
     const char* data[52] = {
         "2BD6459F82C5BC00", "24F20F", "889EEAAF9ED1BA1ABBD8436232E440", "5CA3406AA244CF69CF047AADA2DF40",
@@ -121,7 +121,7 @@ int main()
     };
 
     for (i = 32; i >= 0; i -= 4) {
-        cout << "test set " << (1 + i / 4) << endl;
+        cout << "\ntest set " << (1 + i / 4) << endl;
         setu8(key, data[i]);
         keylen = strlen(data[i]) * 4;
         count = seti(data[i + 1]);
