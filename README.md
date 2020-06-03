@@ -10,9 +10,10 @@ https://en.wikipedia.org/wiki/KASUMI?fbclid=IwAR0YveB6e5TYNVBeWb7Vz-mVrj1S1cDP5T
 
 https://www.etsi.org/deliver/etsi_ts/135200_135299/135202/07.00.00_60/ts_135202v070000p.pdf?fbclid=IwAR0RcxzEXXGqiA5TmmPyeULbonetwli1oZuu5poykqTVaZWIPzj_DgMBlB8
 
-All files in a53kasumi folder -> 
+All relevant files in a53kasumi folder -> 
 kasumi.cpp,
 kasumi.h,
 kgcore.cpp,
 a53.h,
-a53.cpp
+a53.cpp,
+kgcore.h
